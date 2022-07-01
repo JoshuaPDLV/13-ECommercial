@@ -3,6 +3,22 @@ const seedProducts = require('./product-seeds');
 const seedTags = require('./tag-seeds');
 const seedProductTags = require('./product-tag-seeds');
 
+const Router = require('router')
+const router = new Router()
+loadRoutes(router, productsLoader)
+app.use(router.routes())
+
+module.exports = (router, productsLoader) => {
+  router.get('/', async ctx => {
+    const products = await productsLoader.all()
+    ctx.state.model = {
+      title: 'Hey there,',
+      products: products
+    }
+    await ctx.render('home');
+  })
+}
+
 const sequelize = require('../config/connection');
 
 const seedAll = async () => {
